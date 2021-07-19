@@ -72,17 +72,23 @@ bool process_bkb_fn(uint16_t keycode, keyrecord_t *record) {
 
 	switch (keycode) {
 		case KC_0:
-		  if (record->event.pressed){
-			process_bkb_layerchange(0); // reset to base layer
-			layerchanged = true;
-		  }
-		  break;
+			if (record->event.pressed){
+				process_bkb_layerchange(0); // reset to base layer
+				layerchanged = true;
+			}
+			break;
 		case  KC_1:
-		 if (record->event.pressed){
-		  	process_bkb_layerchange(1); // go to function layer
-			layerchanged = true;
-		 }
-		 break;
+			if (record->event.pressed){
+				process_bkb_layerchange(1); // go to function layer
+				layerchanged = true;
+			}
+			break;
+		case KC_2:
+			if (record->event.pressed){
+				rgb_matrix_set_color_all(RGB_WHITE);
+				rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
+				layerchanged = true;
+		    }
 	}
 	return layerchanged;
 }
