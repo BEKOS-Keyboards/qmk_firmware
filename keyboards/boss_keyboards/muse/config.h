@@ -66,9 +66,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * RGB Drivers
  */
 
-#define DRIVER_ADDR_1 0b1010000
+#define DRIVER_ADDR_1 0b1010001
 #define DRIVER_SYNC_1 1
-#define DRIVER_ADDR_2 0b1010001
+#define DRIVER_ADDR_2 0b1010000
 #define DRIVER_SYNC_2 2
 #define DRIVER_COUNT 2
 #define DRIVER_1_LED_TOTAL 64
@@ -84,10 +84,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGB_DISABLE_WHEN_USB_SUSPENDED false // turn off effects when suspended
 #define RGB_MATRIX_LED_PROCESS_LIMIT (DRIVER_LED_TOTAL + 4) / 5 // limits the number of LEDs to process in an animation per task run (increases keyboard responsiveness)
 #define RGB_MATRIX_LED_FLUSH_LIMIT 16 // limits in milliseconds how frequently an animation will update the LEDs. 16 (16ms) is equivalent to limiting to 60fps (increases keyboard responsiveness)
-#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_CYCLE_LEFT_RIGHT // Sets the default mode, if none has been set
+#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_COLOR // Sets the default mode, if none has been set
 #define RGB_MATRIX_STARTUP_HUE 0 // Sets the default hue value, if none has been set
-#define RGB_MATRIX_STARTUP_SAT 255 // Sets the default saturation value, if none has been set
-#define RGB_MATRIX_STARTUP_VAL RGB_MATRIX_MAXIMUM_BRIGHTNESS // Sets the default brightness value, if none has been set
+#define RGB_MATRIX_STARTUP_SAT 0 // Sets the default saturation value, if none has been set
+#define RGB_MATRIX_STARTUP_VAL 128 // Sets the default brightness value, if none has been set
 #define RGB_MATRIX_STARTUP_SPD 127
 //#define RGB_DI_PIN B7
 //#ifdef RGB_DI_PIN
@@ -128,10 +128,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-#define EXTERNAL_EEPROM_I2C_BASE_ADDRESS 0b10100000
-#define EXTERNAL_EEPROM_BYTE_COUNT 65536
-#define EXTERNAL_EEPROM_PAGE_SIZE 128
-#define EXTERNAL_EEPROM_ADDRESS_SIZE 2
+#define EARLY_INIT_PERFORM_BOOTLOADER_JUMP TRUE
+
+//#define EXTERNAL_EEPROM_I2C_BASE_ADDRESS 0b10100000
+//#define EXTERNAL_EEPROM_BYTE_COUNT 65536
+//#define EXTERNAL_EEPROM_PAGE_SIZE 128
+//#define EXTERNAL_EEPROM_ADDRESS_SIZE 2
 
 #define I2C1_SCL_BANK GPIOB
 #define I2C1_SCL 6
@@ -146,7 +148,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define I2C1_TIMINGR_SDADEL 0U
 #define I2C1_TIMINGR_SCLH   1U
 #define I2C1_TIMINGR_SCLL	3U
-
 
 /* If defined, GRAVE_ESC will always act as ESC when CTRL is held.
  * This is useful for the Windows task manager shortcut (ctrl+shift+esc).
