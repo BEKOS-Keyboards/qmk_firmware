@@ -47,10 +47,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* COL2ROW, ROW2COL */
 #define DIODE_DIRECTION COL2ROW
 
+#define SERIAL_USART_TX_PIN A2     // USART TX pin
+#define SERIAL_USART_RX_PIN A3     // USART RX pin
+//#define USART1_REMAP             // Remap USART TX and RX pins on STM32F103 MCUs, see table below.
+//#define SERIAL_USART_PIN_SWAP    // Swap TX and RX pins if keyboard is master halve.
+                                   // Check if this feature is necessary with your keyboard design and available on the mcu.
+#define SELECT_SOFT_SERIAL_SPEED 1 // or 0, 2, 3, 4, 5
+                                   //  0: 460800 baud
+                                   //  1: 230400 baud (default)
+                                   //  2: 115200 baud
+                                   //  3: 57600 baud
+                                   //  4: 38400 baud
+                                   //  5: 19200 baud
+#define SERIAL_USART_DRIVER UARTD2 // USART driver of TX and RX pin. default: UARTD1
+#define SERIAL_USART_TX_PAL_MODE 7 // Pin "alternate function", see the respective datasheet for the appropriate values for your MCU. default: 7
+#define SERIAL_USART_RX_PAL_MODE 7 // Pin "alternate function", see the respective datasheet for the appropriate values for your MCU. default: 7
+#define SERIAL_USART_TIMEOUT 100 // USART driver timeout. default 100
+
 /*
  * Split Keyboard specific options, make sure you have 'SPLIT_KEYBOARD = yes' in your rules.mk, and define SOFT_SERIAL_PIN.
  */
-//#define SOFT_SERIAL_PIN D0  // or D1, D2, D3, E6
+//#define SOFT_SERIAL_PIN B8  // or D1, D2, D3, E6
 
 //#define LED_NUM_LOCK_PIN B0
 //#define LED_CAPS_LOCK_PIN B1
@@ -66,14 +83,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * RGB Drivers
  */
 
-#define DRIVER_ADDR_1 0b1010001
-#define DRIVER_SYNC_1 1
-#define DRIVER_ADDR_2 0b1010000
-#define DRIVER_SYNC_2 2
+#define ISSI_PERSISTENCE 0
+#define DRIVER_ADDR_1 0b1010000
+#define DRIVER_SYNC_1 0x01
+#define DRIVER_ADDR_2 0b1010001
+#define DRIVER_SYNC_2 0x02
 #define DRIVER_COUNT 2
 #define DRIVER_1_LED_TOTAL 64
 #define DRIVER_2_LED_TOTAL 48
 #define DRIVER_LED_TOTAL (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
+#define ENCODER_RESOLUTION 1
 #define ENCODERS_PAD_A { B0 }
 #define ENCODERS_PAD_B { B1 }
 
@@ -84,7 +103,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGB_DISABLE_WHEN_USB_SUSPENDED false // turn off effects when suspended
 #define RGB_MATRIX_LED_PROCESS_LIMIT (DRIVER_LED_TOTAL + 4) / 5 // limits the number of LEDs to process in an animation per task run (increases keyboard responsiveness)
 #define RGB_MATRIX_LED_FLUSH_LIMIT 16 // limits in milliseconds how frequently an animation will update the LEDs. 16 (16ms) is equivalent to limiting to 60fps (increases keyboard responsiveness)
-#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_COLOR // Sets the default mode, if none has been set
+#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_CUSTOM_row_one_only // Sets the default mode, if none has been set
 #define RGB_MATRIX_STARTUP_HUE 0 // Sets the default hue value, if none has been set
 #define RGB_MATRIX_STARTUP_SAT 0 // Sets the default saturation value, if none has been set
 #define RGB_MATRIX_STARTUP_VAL 128 // Sets the default brightness value, if none has been set
@@ -144,10 +163,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define I2C1_SDA_PAL_MODE 4
 
 #define I2C1_TIMINGR_PRESC  5U
-#define I2C1_TIMINGR_SCLDEL 1U
-#define I2C1_TIMINGR_SDADEL 0U
-#define I2C1_TIMINGR_SCLH   1U
-#define I2C1_TIMINGR_SCLL	3U
+#define I2C1_TIMINGR_SCLDEL 3U
+#define I2C1_TIMINGR_SDADEL 3U
+#define I2C1_TIMINGR_SCLH   3U
+#define I2C1_TIMINGR_SCLL	9U
 
 /* If defined, GRAVE_ESC will always act as ESC when CTRL is held.
  * This is useful for the Windows task manager shortcut (ctrl+shift+esc).

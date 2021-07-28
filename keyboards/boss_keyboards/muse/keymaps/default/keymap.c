@@ -23,17 +23,7 @@ enum layer_names {
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
-    BKBFN = SAFE_RANGE,
-	BKBDYNREC,
-	BKBDYNRECEND,
-    BKBDYN1,
-	BKBDYN2,
-	BKBDYN3,
-	BKBDYN4,
-	BKBDYN5,
-	BKBDYN6,
-	BKBDYN7,
-	BKBDYN8
+    BKBFN = SAFE_RANGE
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -55,6 +45,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TRNS, KC_TRNS,    KC_TRNS,                KC_TRNS,                   KC_TRNS,  BKBFN,   KC_TRNS,   KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,       KC_TRNS       \
 	)
 };
+
+
+void keyboard_post_init_user(void) {
+	if (!rgb_matrix_is_enabled()){
+		rgb_matrix_enable();
+	}
+	//rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+	rgb_matrix_set_color_all(0, 0, 0);
+	for (int i=0; i<20; i++) {
+		rgb_matrix_set_color(i, 255, 255, 255);
+	}
+}
+
 
 void process_bkb_layerchange(uint8_t layer_num){
 	static uint8_t cur_layer = 0;

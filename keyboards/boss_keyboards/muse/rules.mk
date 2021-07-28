@@ -24,9 +24,14 @@ AUDIO_ENABLE = no           # Audio output
 # RGB Options
 RGB_MATRIX_ENABLE = yes
 RGB_MATRIX_DRIVER = IS31FL3733
+RGB_MATRIX_CUSTOM_KB = yes
 
 # Music Encoder
 ENCODER_ENABLE = yes
 
 # EEPROM
 EEPROM_DRIVER = i2c
+
+# SERIAL DRIVER
+SERIAL_DRIVER = usart_duplex
+
