@@ -85,14 +85,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define ISSI_PERSISTENCE 0
 #define DRIVER_ADDR_1 0b1010000
-#define DRIVER_SYNC_1 0x01
+#define DRIVER_SYNC_1 0x02
 #define DRIVER_ADDR_2 0b1010001
-#define DRIVER_SYNC_2 0x02
+#define DRIVER_SYNC_2 0x01
 #define DRIVER_COUNT 2
 #define DRIVER_1_LED_TOTAL 64
 #define DRIVER_2_LED_TOTAL 48
 #define DRIVER_LED_TOTAL (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
-#define ENCODER_RESOLUTION 1
+#define ENCODER_RESOLUTION 2
 #define ENCODERS_PAD_A { B0 }
 #define ENCODERS_PAD_B { B1 }
 
@@ -147,7 +147,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-#define EXTERNAL_EEPROM_I2C_BASE_ADDRESS 0b1010010
+#define EXTERNAL_EEPROM_I2C_BASE_ADDRESS 0b10100100
 #define EXTERNAL_EEPROM_BYTE_COUNT 65536
 #define EXTERNAL_EEPROM_PAGE_SIZE 128
 #define EXTERNAL_EEPROM_ADDRESS_SIZE 2
