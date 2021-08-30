@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID    0xFEED
-#define PRODUCT_ID   0x0000
+#define VENDOR_ID    0xB055 // BOSS
+#define PRODUCT_ID   0x43AC // DC/JL
 #define DEVICE_VER   0x0001
 #define MANUFACTURER BOSS-Keyboards
 #define PRODUCT      Muse
@@ -98,15 +98,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define RGB_MATRIX_KEYPRESSES // reacts to keypresses
 #define RGB_MATRIX_KEYRELEASES // reacts to keyreleases (instead of keypresses)
+#define RGB_MATRIX_FRAMEBUFFER_EFFECTS //enable framebuffer effects
 #define RGB_DISABLE_TIMEOUT 0 // number of milliseconds to wait until rgb automatically turns off
 #define RGB_DISABLE_AFTER_TIMEOUT 0 // OBSOLETE: number of ticks to wait until disabling effects
 #define RGB_DISABLE_WHEN_USB_SUSPENDED false // turn off effects when suspended
 #define RGB_MATRIX_LED_PROCESS_LIMIT (DRIVER_LED_TOTAL + 4) / 5 // limits the number of LEDs to process in an animation per task run (increases keyboard responsiveness)
 #define RGB_MATRIX_LED_FLUSH_LIMIT 16 // limits in milliseconds how frequently an animation will update the LEDs. 16 (16ms) is equivalent to limiting to 60fps (increases keyboard responsiveness)
-#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_COLOR // Sets the default mode, if none has been set
-#define RGB_MATRIX_STARTUP_HUE 0 // Sets the default hue value, if none has been set
-#define RGB_MATRIX_STARTUP_SAT 0 // Sets the default saturation value, if none has been set
-#define RGB_MATRIX_STARTUP_VAL 255 // Sets the default brightness value, if none has been set
+#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_TYPING_HEATMAP // Sets the default mode, if none has been set
+#define RGB_MATRIX_STARTUP_HUE 90 // Sets the default hue value, if none has been set
+#define RGB_MATRIX_STARTUP_SAT 255 // Sets the default saturation value, if none has been set
+#define RGB_MATRIX_STARTUP_VAL 85 // Sets the default brightness value, if none has been set
 #define RGB_MATRIX_STARTUP_SPD 127
 //#define RGB_DI_PIN B7
 //#ifdef RGB_DI_PIN
@@ -147,6 +148,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
+//EEPROM Config
+//VIA Setup
+#define DYNAMIC_KEYMAP_EEPROM_MAX_ADDR 65535
+
+//Standard setup
 #define EXTERNAL_EEPROM_I2C_BASE_ADDRESS 0b10100100
 #define EXTERNAL_EEPROM_BYTE_COUNT 65536
 #define EXTERNAL_EEPROM_PAGE_SIZE 128

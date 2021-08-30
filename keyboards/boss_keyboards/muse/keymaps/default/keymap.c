@@ -80,6 +80,7 @@ bool process_bkb_fn(uint16_t keycode, keyrecord_t *record) {
 				rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
 				layerchanged = true;
 		    }
+			break;
 		case KC_PAST:
 			eeconfig_init();
 			break;
@@ -92,15 +93,18 @@ bool process_bkb_fn(uint16_t keycode, keyrecord_t *record) {
 		case KC_P3:
 			rgb_matrix_step_reverse();
 			break;
+		case KC_P8:
+			rgb_matrix_increase_hue();
+			break;
+		case KC_P5:
+			rgb_matrix_increase_sat();
+			break;
+		case KC_P2:
+			rgb_matrix_increase_val();
+			break;
 
 	}
 	return layerchanged;
-}
-
-void keyboard_post_init_user(void) {
-  // Customise these values to desired behaviour
-  debug_enable=true;
-  debug_keyboard=true;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
