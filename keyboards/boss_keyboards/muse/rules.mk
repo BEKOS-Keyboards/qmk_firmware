@@ -10,7 +10,7 @@ BOOTLOADER = stm32-dfu
 BOOTMAGIC_ENABLE = lite     # Virtual DIP switch configuration
 MOUSEKEY_ENABLE = no        # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
-CONSOLE_ENABLE = yes         # Console for debug
+CONSOLE_ENABLE = no         # Console for debug
 COMMAND_ENABLE = no         # Commands for debug and configuration
 # Do not enable SLEEP_LED_ENABLE. it uses the same timer as BACKLIGHT_ENABLE
 SLEEP_LED_ENABLE = no       # Breathing sleep LED during USB suspend
@@ -24,7 +24,6 @@ AUDIO_ENABLE = no           # Audio output
 # RGB Options
 RGB_MATRIX_ENABLE = yes
 RGB_MATRIX_DRIVER = IS31FL3733
-RGB_MATRIX_CUSTOM_KB = yes
 
 # Music Encoder
 ENCODER_ENABLE = yes
@@ -35,4 +34,5 @@ EEPROM_DRIVER = i2c
 # SERIAL DRIVER
 SERIAL_DRIVER = usart_duplex
 
-PLATFORMINC += stm32_registry.h
+# Minimization
+LTO_ENABLE = yes
