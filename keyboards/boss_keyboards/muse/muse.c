@@ -28,6 +28,10 @@ const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
 	MUSE_RGB_INDICATOR
 };
 
+static bool diff_layer = false;
+
+
+
 led_config_t g_led_config = { {
   // Key Matrix to LED Index
     {      0, NO_LED,      1,  2,      3,      4, NO_LED,      5,      6,      7,  8,  9,     10,     11,     12,     13,     14,     15,  16,     17,  18, NO_LED },
@@ -54,6 +58,16 @@ led_config_t g_led_config = { {
 };
 
 
+layer_state_t layer_state_set_kb(layer_state_t state) {
+	switch (get_highest_layer(state)) {
+		case 1:
+			diff_layer = true;
+			break;
+		default:
+			diff_layer = false;
+	}
+	return state;
+}
 
 void rgb_matrix_indicators_kb(void) {
 	led_t led_state = host_keyboard_led_state();
@@ -72,13 +86,8 @@ void rgb_matrix_indicators_kb(void) {
 	} else {
 		rgb_matrix_set_color(SCROLL_LOCK_LED, RGB_OFF);
 	}
-	if (led_state.compose){
-		rgb_matrix_set_color(COMPOSE_LED, RGB_WHITE);
-	} else {
-		rgb_matrix_set_color(COMPOSE_LED, RGB_OFF);
-	}
-	if (led_state.kana){
-		rgb_matrix_set_color(KANA_LED, RGB_WHITE);
+	if (diff_layer) {
+		rgb_matrix_set_color(KANA_LED, RGB_RED);
 	} else {
 		rgb_matrix_set_color(KANA_LED, RGB_OFF);
 	}
