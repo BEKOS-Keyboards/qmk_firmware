@@ -69,20 +69,50 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
 	return state;
 }
 
+void keyboard_post_init_kb(void) {
+#ifdef CONSOLE_ENABLE
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  debug_matrix=false;
+  debug_keyboard=true;
+  //debug_mouse=true;
+#endif
+}
+
+RGB dim_indicators(HSV hsv) {
+	dprintf("Dim Indicators HSV VAL: %u\n", hsv.v);
+	hsv.v = hsv.v - MUSE_INDICATORS_DIM_VAL;
+	dprintf("Dim Indicators HSV VAL: %u\n", hsv.v);
+	return hsv_to_rgb(hsv);
+}
+
 void rgb_matrix_indicators_kb(void) {
 	led_t led_state = host_keyboard_led_state();
+	HSV indicator_hsv = {HSV_WHITE};
 	if (led_state.caps_lock){
-		rgb_matrix_set_color(CAPS_LOCK_LED, RGB_WHITE);
+		RGB indicator_color = dim_indicators(indicator_hsv);
+		rgb_matrix_set_color(CAPS_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
+#if defined(MUSE_KEY_INDICATORS)
+		rgb_matrix_set_color(CAPS_LOCK_KEY_LED, RGB_WHITE);
+#endif
 	} else {
 		rgb_matrix_set_color(CAPS_LOCK_LED, RGB_OFF);
 	}
 	if (led_state.num_lock){
-		rgb_matrix_set_color(NUM_LOCK_LED, RGB_WHITE);
+		RGB indicator_color = dim_indicators(indicator_hsv);
+		rgb_matrix_set_color(NUM_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
+#if defined(MUSE_KEY_INDICATORS)
+		rgb_matrix_set_color(NUM_LOCK_KEY_LED, RGB_WHITE);
+#endif
 	} else {
 		rgb_matrix_set_color(NUM_LOCK_LED, RGB_OFF);
 	}
 	if (led_state.scroll_lock){
-		rgb_matrix_set_color(SCROLL_LOCK_LED, RGB_WHITE);
+		RGB indicator_color = dim_indicators(indicator_hsv);
+		rgb_matrix_set_color(SCROLL_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
+#if defined(MUSE_KEY_INDICATORS)
+		rgb_matrix_set_color(SCROLL_LOCK_KEY_LED, RGB_WHITE);
+#endif
 	} else {
 		rgb_matrix_set_color(SCROLL_LOCK_LED, RGB_OFF);
 	}

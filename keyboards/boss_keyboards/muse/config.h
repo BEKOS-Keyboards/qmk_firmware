@@ -96,6 +96,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENCODERS_PAD_A { B0 }
 #define ENCODERS_PAD_B { B1 }
 
+
+// Enable Backlighting "Indicator Keys" to specific color when defined
+#define MUSE_KEY_INDICATORS
+#define MUSE_INDICATORS_DIM_VAL (RGBLIGHT_LIMIT_VAL/2)
+
 #define RGB_MATRIX_KEYPRESSES // reacts to keypresses
 #define RGB_MATRIX_KEYRELEASES // reacts to keyreleases (instead of keypresses)
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS //enable framebuffer effects
