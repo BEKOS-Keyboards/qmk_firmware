@@ -25,6 +25,9 @@ AUDIO_ENABLE = no           # Audio output
 RGB_MATRIX_ENABLE = yes
 RGB_MATRIX_DRIVER = IS31FL3733
 
+# Combo Enable (For layer switching)
+COMBO_ENABLE = yes
+
 # Music Encoder
 ENCODER_ENABLE = yes
 
@@ -35,4 +38,4 @@ EEPROM_DRIVER = i2c
 SERIAL_DRIVER = usart_duplex
 
 # Minimization
-LTO_ENABLE = yes
+#LTO_ENABLE = yes

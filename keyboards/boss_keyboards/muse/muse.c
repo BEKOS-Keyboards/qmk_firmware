@@ -80,9 +80,7 @@ void keyboard_post_init_kb(void) {
 }
 
 RGB dim_indicators(HSV hsv) {
-	dprintf("Dim Indicators HSV VAL: %u\n", hsv.v);
 	hsv.v = hsv.v - MUSE_INDICATORS_DIM_VAL;
-	dprintf("Dim Indicators HSV VAL: %u\n", hsv.v);
 	return hsv_to_rgb(hsv);
 }
 

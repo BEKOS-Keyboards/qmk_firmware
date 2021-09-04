@@ -27,6 +27,8 @@ enum layer_names {
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
     BKB_FN = SAFE_RANGE,
+	BKB_LAYER_BASE,
+	BKB_LAYER_FN,
 	BKB_RGB_OFF
 };
 
@@ -66,9 +68,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	)
 };
 
+enum combo_events {
+  EN_BASE,
+  EN_FN,
+  COMBO_LENGTH
+};
 
-static uint8_t cur_layer = _BASE;
+uint16_t COMBO_LEN = COMBO_LENGTH;
+
+const uint16_t PROGMEM reset_layer_to_base[] = {BKB_FN, KC_0, COMBO_END};
+const uint16_t PROGMEM enable_layer_fn[] = {BKB_FN, KC_1, COMBO_END};
+combo_t key_combos[] = {
+  [EN_BASE] = COMBO(reset_layer_to_base, BKB_LAYER_BASE),
+  [EN_FN] = COMBO(enable_layer_fn, BKB_LAYER_FN),
+};
+
+
 void process_bkb_layerchange(uint8_t layer_num){
+	static uint8_t cur_layer = _BASE;
 	if (cur_layer == _BASE) {
 		dprintf("Layer Num: %u\n", layer_num);
 		layer_on(layer_num);
@@ -83,52 +100,35 @@ void process_bkb_layerchange(uint8_t layer_num){
 	cur_layer = layer_num;
 }
 
-bool process_bkb_fn(uint16_t keycode, keyrecord_t *record) {
-	bool layerchanged = false;
-	dprintf("Processing layer change...\n");
-	switch (keycode) {
-		case KC_0:
-			if (record->event.pressed){
-				process_bkb_layerchange(_BASE); // reset to base layer
-				layerchanged = true;
-			}
-			break;
-		case  KC_1:
-			if (record->event.pressed){
-				process_bkb_layerchange(_FN); // go to function layer
-				layerchanged = true;
-			}
-			break;
+uint16_t get_combo_term(uint16_t index, combo_t *combo) {
+	switch (index) {
+		case EN_BASE:
+		case EN_FN:
+			return 3000;
 	}
-	return layerchanged;
+	return COMBO_TERM;
 }
 
-static bool bkb_fn_pressed = false;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	bool layerchanged = false;
-	if (bkb_fn_pressed) {
-		layerchanged = process_bkb_fn(keycode, record);
-	}
-	if(!layerchanged){
-		switch (keycode) {
-			case BKB_FN:
-				if (record->event.pressed) {
-					bkb_fn_pressed = true;
-				} else {
-					bkb_fn_pressed = false;
-				}
-				break;
-			case BKB_RGB_OFF:
-				if (record->event.pressed) {
-					rgb_matrix_sethsv(HSV_OFF);
-					rgb_matrix_mode(RGB_MATRIX_NONE);
-				}
-				break;
+  switch (keycode) {
+	case BKB_LAYER_BASE:
+		if (record->event.pressed) {
+			process_bkb_layerchange(_BASE);
 		}
+		break;
+	case BKB_LAYER_FN:
+		if (record->event.pressed) {
+			process_bkb_layerchange(_FN);
+		}
+		break;
+	case BKB_RGB_OFF:
+		if (record->event.pressed) {
+			rgb_matrix_sethsv(HSV_OFF);
+			rgb_matrix_mode(RGB_MATRIX_NONE);
+		}
+		break;
 	}
-	dprintf("BK_FN Pressed: %s, Layer Changed: %s\n", bkb_fn_pressed ? "true":"false", layerchanged ? "true":"false");
-    return true;
+	return true;
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {

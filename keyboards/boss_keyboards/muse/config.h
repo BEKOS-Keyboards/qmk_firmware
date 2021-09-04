@@ -97,6 +97,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENCODERS_PAD_B { B1 }
 
 
+// Combo config for changing layers
+#define COMBO_TERM_PER_COMBO
+
+
 // Enable Backlighting "Indicator Keys" to specific color when defined
 #define MUSE_KEY_INDICATORS
 #define MUSE_INDICATORS_DIM_VAL (RGBLIGHT_LIMIT_VAL/2)
