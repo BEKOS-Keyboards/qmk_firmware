@@ -33,7 +33,7 @@ enum custom_keycodes {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    /* Base */
+  /* Base */
 	// clang-format off
     [_BASE] = LAYOUT(
   		KC_ESC,       KC_F1, KC_F2, KC_F3, KC_F4,    KC_F5, KC_F6, KC_F7, KC_F8,   KC_F9, KC_F10, KC_F11, KC_F12,      KC_PSCR, KC_SLCK, KC_PAUS,      KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, \
@@ -47,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   		KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,             KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
   		KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
   		KC_TRNS,  RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
-  		KC_TRNS,    RGB_RMOD, RGB_TOG, RGB_MOD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,                                           KC_TRNS, KC_TRNS, KC_TRNS,          \
+  		KC_TRNS,    RGB_RMOD, BKB_RGB_OFF, RGB_MOD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,                                           KC_TRNS, KC_TRNS, KC_TRNS,          \
   		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                          KC_TRNS,              KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
   		KC_TRNS, KC_TRNS,    KC_TRNS,                KC_TRNS,                   KC_TRNS,  KC_TRNS,   KC_TRNS,   KC_TRNS,                            KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,          KC_TRNS           \
 	),
@@ -125,8 +125,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		break;
 	case BKB_RGB_OFF:
 		if (record->event.pressed) {
-			rgb_matrix_sethsv(HSV_OFF);
-			rgb_matrix_mode(RGB_MATRIX_NONE);
+			rgb_matrix_mode(RGB_MATRIX_CUSTOM_MUSE_RGB_OFF);
 		}
 		break;
 	}

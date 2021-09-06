@@ -24,6 +24,7 @@ AUDIO_ENABLE = no           # Audio output
 # RGB Options
 RGB_MATRIX_ENABLE = yes
 RGB_MATRIX_DRIVER = IS31FL3733
+RGB_MATRIX_CUSTOM_KB = yes
 
 # Combo Enable (For layer switching)
 COMBO_ENABLE = yes
