@@ -17,6 +17,17 @@
 #include "muse.h"
 #include "muse_rgb_leds.h"
 #include "muse_indicator_control.h"
+#ifdef RGB_MATRIX_ENABLE
+#include "is31fl3733.h"
+#define ISSI_COMMANDREGISTER_WRITELOCK 0xFE
+#define ISSI_COMMANDREGISTER 0xFD
+#define ISSI_PAGE_FUNCTION 0x03    	 // PG3
+#define ISSI_REG_SWPULLUP 0x0F       // PG3
+#define ISSI_REG_CSPULLUP 0x10       // PG3
+#endif
+
+
+
 
 const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
 	MUSE_RGB_ROW_1 ,
@@ -71,6 +82,22 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
 	return state;
 }
 
+#ifdef RGB_MATRIX_ENABLE
+void enable_deghost_on_rgb_matrix_driver(uint8_t addr) {
+	// Unlock command register
+	IS31FL3733_write_register(addr, ISSI_COMMANDREGISTER_WRITELOCK, 0xC5);
+
+	//Select PG3
+	IS31FL3733_write_register(addr, ISSI_COMMANDREGISTER, ISSI_PAGE_FUNCTION);
+	// Set SWx Pull-up
+	IS31FL3733_write_register(addr, ISSI_REG_SWPULLUP, 0x07);
+	// Set CSx Pull-down
+	IS31FL3733_write_register(addr, ISSI_REG_CSPULLUP, 0x07);
+	// Wait 10ms to ensure the device has been configured.
+	wait_ms(10);
+}
+#endif
+
 void keyboard_post_init_kb(void) {
 #ifdef CONSOLE_ENABLE
   // Customise these values to desired behaviour
@@ -79,6 +106,12 @@ void keyboard_post_init_kb(void) {
   debug_keyboard=true;
   //debug_mouse=true;
 #endif
+#ifdef RGB_MATRIX_ENABLE
+    // This is a hack to enable de-ghosting resistors on the keyboard
+	enable_deghost_on_rgb_matrix_driver(DRIVER_ADDR_1);
+	enable_deghost_on_rgb_matrix_driver(DRIVER_ADDR_2);
+#endif
+	keyboard_post_init_user();
 }
 
 RGB dim_indicators(HSV hsv) {
