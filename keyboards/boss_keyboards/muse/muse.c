@@ -17,8 +17,12 @@
 #include "muse.h"
 #include "muse_rgb_leds.h"
 #include "muse_indicator_control.h"
+#ifdef CONSOLE_ENABLE
+#include "print.h"
+#endif
 #ifdef RGB_MATRIX_ENABLE
 #include "is31fl3733.h"
+#include <lib/lib8tion/lib8tion.h>
 #define ISSI_COMMANDREGISTER_WRITELOCK 0xFE
 #define ISSI_COMMANDREGISTER 0xFD
 #define ISSI_PAGE_FUNCTION 0x03    	 // PG3
@@ -26,6 +30,8 @@
 #define ISSI_REG_CSPULLUP 0x10       // PG3
 #endif
 
+// Maximum brightness on the indicator led HSV color
+#define INDICATOR_MAX_LED_VAL (UINT8_MAX - MUSE_INDICATORS_DIM_VAL)
 
 
 
@@ -155,4 +161,5 @@ void rgb_matrix_indicators_kb(void) {
 	} else {
 		rgb_matrix_set_color(KANA_LED, RGB_OFF);
 	}
+
 }
