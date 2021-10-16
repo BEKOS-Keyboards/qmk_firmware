@@ -28,6 +28,24 @@
  * represents the switch matrix.
  */
 
+#if defined(__GNUC__)
+#    define PACKED __attribute__((__packed__))
+#else
+#    define PACKED
+#endif
+
+typedef union {
+	uint32_t raw;
+	struct PACKED {
+		bool underkey_lock_rgb_enable :1;
+	};
+} keyboard_config_t;
+
+enum keyboard_keycodes {
+    BKB_IND_TOG = SAFE_RANGE,
+    NEW_SAFE_RANGE  // Important!
+};
+
 #define XXXX KC_NO
 
 #define LAYOUT( \

@@ -46,6 +46,7 @@ const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
 };
 
 static bool diff_layer = false;
+static keyboard_config_t kb_config;
 
 
 
@@ -88,6 +89,13 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
 	return state;
 }
 
+void eeconfig_init_kb(void) {
+	keyboard_config_t init = {0};
+	init.underkey_lock_rgb_enable = true;
+	eeconfig_update_kb(init.raw);
+	eeconfig_init_user();
+}
+
 #ifdef RGB_MATRIX_ENABLE
 void enable_deghost_on_rgb_matrix_driver(uint8_t addr) {
 	// Unlock command register
@@ -108,8 +116,8 @@ void keyboard_post_init_kb(void) {
 #ifdef CONSOLE_ENABLE
   // Customise these values to desired behaviour
   debug_enable=true;
-  debug_matrix=false;
-  debug_keyboard=true;
+  //debug_matrix=false;
+  //debug_keyboard=true;
   //debug_mouse=true;
 #endif
 #ifdef RGB_MATRIX_ENABLE
@@ -117,10 +125,23 @@ void keyboard_post_init_kb(void) {
 	enable_deghost_on_rgb_matrix_driver(DRIVER_ADDR_1);
 	enable_deghost_on_rgb_matrix_driver(DRIVER_ADDR_2);
 #endif
+	kb_config.raw = eeconfig_read_kb();
 	keyboard_post_init_user();
 }
 
-RGB dim_indicators(HSV hsv) {
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+	switch(keycode) {
+		case BKB_IND_TOG:
+			if (record->event.pressed){
+				kb_config.underkey_lock_rgb_enable = !kb_config.underkey_lock_rgb_enable;
+				eeconfig_update_kb(kb_config.raw);
+			}
+			return false;
+	}
+	return process_record_user(keycode, record);
+}
+
+static inline RGB dim_indicators(HSV hsv) {
 	hsv.v = hsv.v - MUSE_INDICATORS_DIM_VAL;
 	return hsv_to_rgb(hsv);
 }
@@ -132,7 +153,9 @@ void rgb_matrix_indicators_kb(void) {
 		RGB indicator_color = dim_indicators(indicator_hsv);
 		rgb_matrix_set_color(CAPS_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
-		rgb_matrix_set_color(CAPS_LOCK_KEY_LED, RGB_WHITE);
+		if (kb_config.underkey_lock_rgb_enable) {
+			rgb_matrix_set_color(CAPS_LOCK_KEY_LED, RGB_WHITE);
+		}
 #endif
 	} else {
 		rgb_matrix_set_color(CAPS_LOCK_LED, RGB_OFF);
@@ -141,7 +164,9 @@ void rgb_matrix_indicators_kb(void) {
 		RGB indicator_color = dim_indicators(indicator_hsv);
 		rgb_matrix_set_color(NUM_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
-		rgb_matrix_set_color(NUM_LOCK_KEY_LED, RGB_WHITE);
+		if (kb_config.underkey_lock_rgb_enable) {
+			rgb_matrix_set_color(NUM_LOCK_KEY_LED, RGB_WHITE);
+		}
 #endif
 	} else {
 		rgb_matrix_set_color(NUM_LOCK_LED, RGB_OFF);
@@ -150,7 +175,9 @@ void rgb_matrix_indicators_kb(void) {
 		RGB indicator_color = dim_indicators(indicator_hsv);
 		rgb_matrix_set_color(SCROLL_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
-		rgb_matrix_set_color(SCROLL_LOCK_KEY_LED, RGB_WHITE);
+		if (kb_config.underkey_lock_rgb_enable) {
+			rgb_matrix_set_color(SCROLL_LOCK_KEY_LED, RGB_WHITE);
+		}
 #endif
 	} else {
 		rgb_matrix_set_color(SCROLL_LOCK_LED, RGB_OFF);

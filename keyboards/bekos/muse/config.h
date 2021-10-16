@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID    0xB055 // BOSS
+#define VENDOR_ID    0xBEC0 // BEKOS
 #define PRODUCT_ID   0x43AC // DC/JL
 #define DEVICE_VER   0x0001
-#define MANUFACTURER BOSS-Keyboards
+#define MANUFACTURER BEKOS
 #define PRODUCT      Muse
 
 /* key matrix size */
