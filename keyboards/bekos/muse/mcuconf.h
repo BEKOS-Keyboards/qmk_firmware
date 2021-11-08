@@ -2,6 +2,8 @@
 
 #include_next <mcuconf.h>
 
+#undef STM32L443_MCUCONF
+#define STM32L433_MCUCONF
 
 // Setup clock to use the onboard oscillator
 #undef STM32_HSI16_ENABLED

@@ -1,7 +1,7 @@
 {
-    "keyboard_name": "muse", 
-    "url": "https://github.com/BOSS-Keyboards/Muse", 
-    "maintainer": "BOSS-Keyboards, qmk", 
+    "keyboard_name": "Muse", 
+    "url": "https://github.com/BEKOS-Keyboards/Muse", 
+    "maintainer": "BEKOS, qmk", 
     "width": 22.5, 
     "height": 6.5,
     "MCU": "STM32L433",
