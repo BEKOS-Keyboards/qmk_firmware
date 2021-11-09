@@ -40,7 +40,7 @@ const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
 	MUSE_RGB_INDICATOR
 };
 
-static bool diff_layer = false;
+static muse_layer_t layer_ind_conf;
 static keyboard_config_t kb_config;
 
 
@@ -76,10 +76,36 @@ led_config_t g_led_config = { {
 layer_state_t layer_state_set_kb(layer_state_t state) {
 	switch (get_highest_layer(state)) {
 		case 1:
-			diff_layer = true;
+			layer_ind_conf.right = IND_USER;
+			layer_ind_conf.left  = IND_OFF;
+			break;
+		case 2:
+			layer_ind_conf.right = IND_OFF;
+			layer_ind_conf.left  = IND_USER;
+			break;
+		case 3:
+			layer_ind_conf.right = IND_USER;
+			layer_ind_conf.left  = IND_USER;
+			break;
+		case 4:
+			layer_ind_conf.right = IND_WHITE;
+			layer_ind_conf.left  = IND_OFF;
+			break;
+		case 5:
+			layer_ind_conf.right = IND_OFF;
+			layer_ind_conf.left  = IND_WHITE;
+			break;
+		case 6:
+			layer_ind_conf.right = IND_WHITE;
+			layer_ind_conf.left  = IND_WHITE;
+			break;
+		case 7:
+			layer_ind_conf.right = IND_USER;
+			layer_ind_conf.left  = IND_WHITE;
 			break;
 		default:
-			diff_layer = false;
+			layer_ind_conf.right = IND_OFF;
+			layer_ind_conf.left  = IND_OFF;
 	}
 	return state;
 }
@@ -116,8 +142,28 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 static inline RGB dim_indicators(HSV hsv) {
-	hsv.v = hsv.v - MUSE_INDICATORS_DIM_VAL;
+	if (hsv.v > MUSE_INDICATORS_DIM_VAL) {
+		hsv.v = hsv.v - MUSE_INDICATORS_DIM_VAL;
+	} else {
+		hsv.v = 0;
+	}
 	return hsv_to_rgb(hsv);
+}
+
+static inline HSV get_muse_layer_indicators(muse_layer_color_e color) {
+	static HSV hsv_off = {HSV_OFF};
+	static HSV hsv_white = {HSV_WHITE};
+	switch (color) {
+		case IND_OFF:
+			return hsv_off;
+		case IND_WHITE:
+			return hsv_white;
+		case IND_USER:
+			return rgb_matrix_get_hsv();
+		default:
+			return hsv_off;
+	}
+	return hsv_off;
 }
 
 void rgb_matrix_indicators_kb(void) {
@@ -156,11 +202,8 @@ void rgb_matrix_indicators_kb(void) {
 	} else {
 		rgb_matrix_set_color(SCROLL_LOCK_LED, RGB_OFF);
 	}
-	rgb_matrix_set_color(COMPOSE_LED, RGB_OFF);
-	if (diff_layer) {
-		rgb_matrix_set_color(KANA_LED, RGB_RED);
-	} else {
-		rgb_matrix_set_color(KANA_LED, RGB_OFF);
-	}
-
+	RGB compose_led_color = dim_indicators(get_muse_layer_indicators(layer_ind_conf.left));
+	RGB kana_led_color = dim_indicators(get_muse_layer_indicators(layer_ind_conf.right));
+	rgb_matrix_set_color(COMPOSE_LED, compose_led_color.r, compose_led_color.g, compose_led_color.b);
+	rgb_matrix_set_color(KANA_LED, kana_led_color.r, kana_led_color.g, kana_led_color.b);
 }

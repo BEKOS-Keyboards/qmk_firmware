@@ -41,6 +41,17 @@ typedef union {
 	};
 } keyboard_config_t;
 
+typedef enum {
+	IND_OFF,
+	IND_WHITE,
+	IND_USER
+} muse_layer_color_e;
+
+typedef struct muse_layer {
+	muse_layer_color_e right;
+	muse_layer_color_e left;
+} muse_layer_t;
+
 enum keyboard_keycodes {
     BKB_IND_TOG = SAFE_RANGE,
     NEW_SAFE_RANGE  // Important!
