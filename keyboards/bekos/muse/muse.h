@@ -38,6 +38,7 @@ typedef union {
 	uint32_t raw;
 	struct PACKED {
 		bool underkey_lock_rgb_enable :1;
+		bool user_color_for_lock_ind: 1;
 	};
 } keyboard_config_t;
 
@@ -54,6 +55,7 @@ typedef struct muse_layer {
 
 enum keyboard_keycodes {
     BKB_IND_TOG = SAFE_RANGE,
+	BKB_USER_TOG,
     NEW_SAFE_RANGE  // Important!
 };
 

@@ -137,6 +137,13 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 				eeconfig_update_kb(kb_config.raw);
 			}
 			return false;
+		case BKB_USER_TOG:
+			if (record->event.pressed){
+				kb_config.user_color_for_lock_ind = !kb_config.user_color_for_lock_ind;
+				eeconfig_update_kb(kb_config.raw);
+			}
+			return false;
+
 	}
 	return process_record_user(keycode, record);
 }
@@ -168,9 +175,14 @@ static inline HSV get_muse_layer_indicators(muse_layer_color_e color) {
 
 void rgb_matrix_indicators_kb(void) {
 	led_t led_state = host_keyboard_led_state();
-	HSV indicator_hsv = {HSV_WHITE};
+	static HSV white_hsv = {HSV_WHITE};
+	static RGB indicator_color;
 	if (led_state.caps_lock){
-		RGB indicator_color = dim_indicators(indicator_hsv);
+		if (kb_config.user_color_for_lock_ind) {
+			indicator_color = dim_indicators(rgb_matrix_get_hsv());
+		} else {
+			indicator_color = dim_indicators(white_hsv);
+		}
 		rgb_matrix_set_color(CAPS_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
 		if (kb_config.underkey_lock_rgb_enable) {
@@ -181,7 +193,11 @@ void rgb_matrix_indicators_kb(void) {
 		rgb_matrix_set_color(CAPS_LOCK_LED, RGB_OFF);
 	}
 	if (led_state.num_lock){
-		RGB indicator_color = dim_indicators(indicator_hsv);
+		if (kb_config.user_color_for_lock_ind) {
+			indicator_color = dim_indicators(rgb_matrix_get_hsv());
+		} else {
+			indicator_color = dim_indicators(white_hsv);
+		}
 		rgb_matrix_set_color(NUM_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
 		if (kb_config.underkey_lock_rgb_enable) {
@@ -192,7 +208,11 @@ void rgb_matrix_indicators_kb(void) {
 		rgb_matrix_set_color(NUM_LOCK_LED, RGB_OFF);
 	}
 	if (led_state.scroll_lock){
-		RGB indicator_color = dim_indicators(indicator_hsv);
+		if (kb_config.user_color_for_lock_ind) {
+			indicator_color = dim_indicators(rgb_matrix_get_hsv());
+		} else {
+			indicator_color = dim_indicators(white_hsv);
+		}
 		rgb_matrix_set_color(SCROLL_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
 		if (kb_config.underkey_lock_rgb_enable) {
