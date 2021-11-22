@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT_ID   0x43AC // DC/JL
 #define DEVICE_VER   0x0001
 #define MANUFACTURER BEKOS
-//#define PRODUCT      Muse
+#define PRODUCT      Muse
 
 /* key matrix size */
 #define MATRIX_ROWS 6
@@ -84,8 +84,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define ISSI_PERSISTENCE 0
-#define ISSI_SWPULLUP PUR_32KR
-#define ISSI_CSPULLUP PUR_32KR
 #define DRIVER_ADDR_1 0b1010000
 #define DRIVER_SYNC_1 0x02
 #define DRIVER_ADDR_2 0b1010001
