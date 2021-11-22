@@ -82,7 +82,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
  * RGB Drivers
  */
-
+#define ISSI_SWPULLUP PUR_32KR
+#define ISSI_CSPULLUP PUR_32KR
 #define ISSI_PERSISTENCE 0
 #define DRIVER_ADDR_1 0b1010000
 #define DRIVER_SYNC_1 0x02
