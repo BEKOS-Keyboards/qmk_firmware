@@ -25,10 +25,6 @@
 #    include "backlight.h"
 #endif
 
-#ifdef API_ENABLE
-#    include "api.h"
-#endif
-
 #ifdef MIDI_ENABLE
 #    include "process_midi.h"
 #endif
@@ -66,15 +62,15 @@ uint8_t extract_mod_bits(uint16_t code) {
     uint8_t mods_to_send = 0;
 
     if (code & QK_RMODS_MIN) {  // Right mod flag is set
-        if (code & QK_LCTL) mods_to_send |= MOD_BIT(KC_RCTL);
-        if (code & QK_LSFT) mods_to_send |= MOD_BIT(KC_RSFT);
-        if (code & QK_LALT) mods_to_send |= MOD_BIT(KC_RALT);
-        if (code & QK_LGUI) mods_to_send |= MOD_BIT(KC_RGUI);
+        if (code & QK_LCTL) mods_to_send |= MOD_BIT(KC_RIGHT_CTRL);
+        if (code & QK_LSFT) mods_to_send |= MOD_BIT(KC_RIGHT_SHIFT);
+        if (code & QK_LALT) mods_to_send |= MOD_BIT(KC_RIGHT_ALT);
+        if (code & QK_LGUI) mods_to_send |= MOD_BIT(KC_RIGHT_GUI);
     } else {
-        if (code & QK_LCTL) mods_to_send |= MOD_BIT(KC_LCTL);
-        if (code & QK_LSFT) mods_to_send |= MOD_BIT(KC_LSFT);
-        if (code & QK_LALT) mods_to_send |= MOD_BIT(KC_LALT);
-        if (code & QK_LGUI) mods_to_send |= MOD_BIT(KC_LGUI);
+        if (code & QK_LCTL) mods_to_send |= MOD_BIT(KC_LEFT_CTRL);
+        if (code & QK_LSFT) mods_to_send |= MOD_BIT(KC_LEFT_SHIFT);
+        if (code & QK_LALT) mods_to_send |= MOD_BIT(KC_LEFT_ALT);
+        if (code & QK_LGUI) mods_to_send |= MOD_BIT(KC_LEFT_GUI);
     }
 
     return mods_to_send;
@@ -297,6 +293,9 @@ bool process_record_quantum(keyrecord_t *record) {
 #ifdef JOYSTICK_ENABLE
             process_joystick(keycode, record) &&
 #endif
+#ifdef PROGRAMMABLE_BUTTON_ENABLE
+            process_programmable_button(keycode, record) &&
+#endif
             true)) {
         return false;
     }
@@ -466,14 +465,6 @@ void matrix_scan_quantum() {
 #    include "hd44780.h"
 #endif
 
-void api_send_unicode(uint32_t unicode) {
-#ifdef API_ENABLE
-    uint8_t chunk[4];
-    dword_to_bytes(unicode, chunk);
-    MT_SEND_DATA(DT_UNICODE, chunk, 5);
-#endif
-}
-
 //------------------------------------------------------------------------------
 // Override these functions in your keymap file to play different tunes on
 // different events such as startup and bootloader jump
@@ -481,3 +472,103 @@ void api_send_unicode(uint32_t unicode) {
 __attribute__((weak)) void startup_user() {}
 
 __attribute__((weak)) void shutdown_user() {}
+
+/** \brief Run keyboard level Power down
+ *
+ * FIXME: needs doc
+ */
+__attribute__((weak)) void suspend_power_down_user(void) {}
+/** \brief Run keyboard level Power down
+ *
+ * FIXME: needs doc
+ */
+__attribute__((weak)) void suspend_power_down_kb(void) { suspend_power_down_user(); }
+
+void suspend_power_down_quantum(void) {
+#ifndef NO_SUSPEND_POWER_DOWN
+// Turn off backlight
+#    ifdef BACKLIGHT_ENABLE
+    backlight_set(0);
+#    endif
+
+#    ifdef LED_MATRIX_ENABLE
+    led_matrix_task();
+#    endif
+#    ifdef RGB_MATRIX_ENABLE
+    rgb_matrix_task();
+#    endif
+
+    // Turn off LED indicators
+    uint8_t leds_off = 0;
+#    if defined(BACKLIGHT_CAPS_LOCK) && defined(BACKLIGHT_ENABLE)
+    if (is_backlight_enabled()) {
+        // Don't try to turn off Caps Lock indicator as it is backlight and backlight is already off
+        leds_off |= (1 << USB_LED_CAPS_LOCK);
+    }
+#    endif
+    led_set(leds_off);
+
+// Turn off audio
+#    ifdef AUDIO_ENABLE
+    stop_all_notes();
+#    endif
+
+// Turn off underglow
+#    if defined(RGBLIGHT_SLEEP) && defined(RGBLIGHT_ENABLE)
+    rgblight_suspend();
+#    endif
+
+#    if defined(LED_MATRIX_ENABLE)
+    led_matrix_set_suspend_state(true);
+#    endif
+#    if defined(RGB_MATRIX_ENABLE)
+    rgb_matrix_set_suspend_state(true);
+#    endif
+
+#    ifdef OLED_ENABLE
+    oled_off();
+#    endif
+#    ifdef ST7565_ENABLE
+    st7565_off();
+#    endif
+#    if defined(POINTING_DEVICE_ENABLE)
+    // run to ensure scanning occurs while suspended
+    pointing_device_task();
+#    endif
+#endif
+}
+
+/** \brief run user level code immediately after wakeup
+ *
+ * FIXME: needs doc
+ */
+__attribute__((weak)) void suspend_wakeup_init_user(void) {}
+
+/** \brief run keyboard level code immediately after wakeup
+ *
+ * FIXME: needs doc
+ */
+__attribute__((weak)) void suspend_wakeup_init_kb(void) { suspend_wakeup_init_user(); }
+
+__attribute__((weak)) void suspend_wakeup_init_quantum(void) {
+// Turn on backlight
+#ifdef BACKLIGHT_ENABLE
+    backlight_init();
+#endif
+
+    // Restore LED indicators
+    led_set(host_keyboard_leds());
+
+// Wake up underglow
+#if defined(RGBLIGHT_SLEEP) && defined(RGBLIGHT_ENABLE)
+    rgblight_wakeup();
+#endif
+
+#if defined(LED_MATRIX_ENABLE)
+    led_matrix_set_suspend_state(false);
+#endif
+#if defined(RGB_MATRIX_ENABLE)
+    rgb_matrix_set_suspend_state(false);
+#endif
+    suspend_wakeup_init_kb();
+}
