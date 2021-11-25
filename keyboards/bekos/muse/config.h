@@ -82,8 +82,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
  * RGB Drivers
  */
-#define ISSI_SWPULLUP PUR_32KR
-#define ISSI_CSPULLUP PUR_32KR
+#define ISSI_SWPULLUP PUR_05KR
+#define ISSI_CSPULLUP PUR_05KR
+#define ISSI_PWM_FREQUENCY 0b010 //PFS = 26.7kHz -- Should get rid of the buzz
 #define ISSI_PERSISTENCE 0
 #define DRIVER_ADDR_1 0b1010000
 #define DRIVER_SYNC_1 0x02
@@ -107,7 +108,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MUSE_INDICATORS_DIM_VAL (RGBLIGHT_LIMIT_VAL/2)
 
 #define RGB_MATRIX_KEYPRESSES // reacts to keypresses
-#define RGB_MATRIX_KEYRELEASES // reacts to keyreleases (instead of keypresses)
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS //enable framebuffer effects
 #define RGB_DISABLE_TIMEOUT 0 // number of milliseconds to wait until rgb automatically turns off
 #define RGB_DISABLE_AFTER_TIMEOUT 0 // OBSOLETE: number of ticks to wait until disabling effects
