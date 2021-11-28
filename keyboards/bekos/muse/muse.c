@@ -149,11 +149,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 static inline RGB dim_indicators(HSV hsv) {
-	if (hsv.v > MUSE_INDICATORS_DIM_VAL) {
-		hsv.v = hsv.v - MUSE_INDICATORS_DIM_VAL;
-	} else {
-		hsv.v = 0;
-	}
+	hsv.v = scale8(hsv.v, UINT8_MAX-MUSE_INDICATORS_DIM_VAL);
 	return hsv_to_rgb(hsv);
 }
 
