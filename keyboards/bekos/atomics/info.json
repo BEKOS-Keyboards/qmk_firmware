@@ -1,0 +1,6 @@
+{
+    "keyboard_name": "Atomics",
+    "url": "https://github.com/BEKOS-Keyboards/Atomics",
+    "maintainer": "BEKOS",
+    "MCU": "STM32L433"
+}

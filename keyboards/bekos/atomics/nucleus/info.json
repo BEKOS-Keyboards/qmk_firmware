@@ -1,0 +1,29 @@
+{
+    "keyboard_name": "Nucleus",
+    "url": "https://github.com/BEKOS-Keyboards/Atomics",
+    "maintainer": "BEKOS",
+    "manufacturer": "BEKOS",
+    "width": 22.5,
+    "height": 6.5,
+    "usb": {
+        "pid": "0x1209",
+        "vid": "0x43AC",
+        "device_version": "1.0.0"
+    },
+    "layouts": {
+        "LAYOUT": {
+            "layout": [{"label":"KC_ESC", "x":0, "y":0}, {"label":"KC_F1", "x":2, "y":0}, {"label":"KC_F2", "x":3, "y":0}, {"label":"KC_F3", "x":4, "y":0}, {"label":"KC_F4", "x":5, "y":0}, {"label":"KC_F5", "x":6.5, "y":0}, {"label":"KC_F6", "x":7.5, "y":0}, {"label":"KC_F7", "x":8.5, "y":0}, {"label":"KC_F8", "x":9.5, "y":0}, {"label":"KC_F9", "x":11, "y":0}, {"label":"KC_F10", "x":12, "y":0}, {"label":"KC_F11", "x":13, "y":0}, {"label":"KC_F12", "x":14, "y":0}, {"label":"KC_PSCR", "x":15.25, "y":0}, {"label":"KC_SLCK", "x":16.25, "y":0}, {"label":"KC_PAUS", "x":17.25, "y":0}, {"label":"KC_MUTE", "x":21.5, "y":0},
+            		   {"label":"KC_GRV", "x":0, "y":1.5}, {"label":"KC_1", "x":1, "y":1.5}, {"label":"KC_2", "x":2, "y":1.5}, {"label":"KC_3", "x":3, "y":1.5}, {"label":"KC_4", "x":4, "y":1.5}, {"label":"KC_5", "x":5, "y":1.5}, {"label":"KC_6", "x":6, "y":1.5}, {"label":"KC_7", "x":7, "y":1.5}, {"label":"KC_8", "x":8, "y":1.5}, {"label":"KC_9", "x":9, "y":1.5}, {"label":"KC_0", "x":10, "y":1.5}, {"label":"KC_MINS", "x":11, "y":1.5}, {"label":"KC_EQL", "x":12, "y":1.5}, {"label":"KC_BSPC", "x":13, "y":1.5, "w":2}, {"label":"KC_INS", "x":15.25, "y":1.5}, {"label":"KC_HOME", "x":16.25, "y":1.5}, {"label":"KC_PGUP", "x":17.25, "y":1.5},
+            		   {"label":"KC_TAB", "x":0, "y":2.5, "w":1.5}, {"label":"KC_Q", "x":1.5, "y":2.5}, {"label":"KC_W", "x":2.5, "y":2.5}, {"label":"KC_E", "x":3.5, "y":2.5}, {"label":"KC_R", "x":4.5, "y":2.5}, {"label":"KC_T", "x":5.5, "y":2.5}, {"label":"KC_Y", "x":6.5, "y":2.5}, {"label":"KC_U", "x":7.5, "y":2.5}, {"label":"KC_I", "x":8.5, "y":2.5}, {"label":"KC_O", "x":9.5, "y":2.5}, {"label":"KC_P", "x":10.5, "y":2.5}, {"label":"KC_LBRC", "x":11.5, "y":2.5}, {"label":"KC_RBRC", "x":12.5, "y":2.5}, {"label":"KC_BSLS", "x":13.5, "y":2.5, "w":1.5}, {"label":"KC_DEL", "x":15.25, "y":2.5}, {"label":"KC_END", "x":16.25, "y":2.5}, {"label":"KC_PGDN", "x":17.25, "y":2.5},
+            		   {"label":"KC_CAPS", "x":0, "y":3.5, "w":1.75}, {"label":"KC_A", "x":1.75, "y":3.5}, {"label":"KC_S", "x":2.75, "y":3.5}, {"label":"KC_D", "x":3.75, "y":3.5}, {"label":"KC_F", "x":4.75, "y":3.5}, {"label":"KC_G", "x":5.75, "y":3.5}, {"label":"KC_H", "x":6.75, "y":3.5}, {"label":"KC_J", "x":7.75, "y":3.5}, {"label":"KC_K", "x":8.75, "y":3.5}, {"label":"KC_L", "x":9.75, "y":3.5}, {"label":"KC_SCLN", "x":10.75, "y":3.5}, {"label":"KC_QUOT", "x":11.75, "y":3.5}, {"label":"KC_ENT", "x":12.75, "y":3.5, "w":2.25},
+            		   {"label":"KC_LSFT", "x":0, "y":4.5, "w":2.25}, {"label":"KC_Z", "x":2.25, "y":4.5}, {"label":"KC_X", "x":3.25, "y":4.5}, {"label":"KC_C", "x":4.25, "y":4.5}, {"label":"KC_V", "x":5.25, "y":4.5}, {"label":"KC_B", "x":6.25, "y":4.5}, {"label":"KC_N", "x":7.25, "y":4.5}, {"label":"KC_M", "x":8.25, "y":4.5}, {"label":"KC_COMM", "x":9.25, "y":4.5}, {"label":"KC_DOT", "x":10.25, "y":4.5}, {"label":"KC_SLSH", "x":11.25, "y":4.5}, {"label":"KC_RSFT", "x":12.25, "y":4.5, "w":2.75}, {"label":"KC_UP", "x":16.25, "y":4.5},
+            		   {"label":"KC_LCTL", "x":0, "y":5.5, "w":1.25}, {"label":"KC_LGUI", "x":1.25, "y":5.5, "w":1.25}, {"label":"KC_LALT", "x":2.5, "y":5.5, "w":1.25}, {"label": "KC_SPC", "x":3.75, "y":5.5, "w":6.25}, {"label":"KC_RALT", "x":10, "y":5.5, "w":1.25}, {"label":"BKBFN", "x":11.25, "y":5.5, "w":1.25}, {"label":"KC_APP", "x":12.5, "y":5.5, "w":1.25}, {"label":"KC_LCTL", "x":13.75, "y":5.5, "w":1.25}, {"label":"KC_LEFT", "x":15.25, "y":5.5}, {"label":"KC_DOWN", "x":16.25, "y":5.5}, {"label":"KC_RIGHT", "x":17.25, "y":5.5},
+                       {"label": "KC_NUM", "x":18.5, "y": 1.5}, {"label": "KC_PSLS", "x":19.5, "y": 1.5}, {"label": "KC_PAST", "x":20.5, "y": 1.5}, {"label": "KC_PMNS", "x":21.5, "y": 1.5},
+                       {"label": "KC_P7", "x":18.5, "y": 2.5}, {"label": "KC_P8", "x":19.5, "y": 2.5},{"label": "KC_P9", "x":20.5, "y": 2.5}, {"label": "KC_PPLS", "x":21.25, "y": 2.5},
+                       {"label": "KC_P4", "x":18.5, "y": 3.5}, {"label": "KC_P5", "x":19.5, "y": 3.5}, {"label": "KC_P6", "x":20.5, "y": 3.5},
+                       {"label": "KC_P1", "x":18.5, "y": 4.5}, {"label": "KC_P2", "x":19.5, "y": 4.5}, {"label": "KC_P3", "x":20.5, "y": 4.5}, {"label": "KC_PENT", "x":21.5, "y": 4.5},
+                       {"label": "KC_P0", "x":18.5, "y": 5.5}, {"label": "KC_PDOT", "x":20.5, "y": 5.5}
+                    ]
+        }
+    }
+}
