@@ -1,4 +1,4 @@
-/* Copyright 2021 BOSS-Keyboards
+/* Copyright 2021-2024 BEKOS Keyboards
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,10 +169,14 @@ static inline HSV get_muse_layer_indicators(muse_layer_color_e color) {
 	return hsv_off;
 }
 
-void rgb_matrix_indicators_kb(void) {
+bool rgb_matrix_indicators_kb(void) {
 	led_t led_state = host_keyboard_led_state();
 	static HSV white_hsv = {HSV_WHITE};
 	static RGB indicator_color;
+    if (!rgb_matrix_indicators_user()) {
+        return false;
+    }
+
 	if (led_state.caps_lock){
 		if (kb_config.user_color_for_lock_ind) {
 			indicator_color = dim_indicators(rgb_matrix_get_hsv());
@@ -222,4 +226,5 @@ void rgb_matrix_indicators_kb(void) {
 	RGB kana_led_color = dim_indicators(get_muse_layer_indicators(layer_ind_conf.right));
 	rgb_matrix_set_color(COMPOSE_LED, compose_led_color.r, compose_led_color.g, compose_led_color.b);
 	rgb_matrix_set_color(KANA_LED, kana_led_color.r, kana_led_color.g, kana_led_color.b);
+    return true;
 }
