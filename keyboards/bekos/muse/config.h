@@ -1,30 +1,20 @@
-/*
-Copyright 2021 BOSS-Keyboards
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+/* Copyright 2021-2024 BEKOS Keyboards
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #pragma once
-
-#include "config_common.h"
-
-/* USB Device descriptor parameter */
-#define VENDOR_ID    0x1209 // pidcodes VID
-#define PRODUCT_ID   0x43AC // DC/JL (PID)
-#define DEVICE_VER   0x0001
-#define MANUFACTURER BEKOS
-#define PRODUCT      Muse
 
 /* key matrix size */
 #define MATRIX_ROWS 6
@@ -42,7 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #define MATRIX_ROW_PINS { B5, C1, D2, C12, C11, C10 }
 #define MATRIX_COL_PINS { A15, A10, A9, A8, C9, C8, C7, C6, B15, B14, B13, B12, B11, B10, B2, C5, C4, C3, A7, A6, A5, A4 }
-#define UNUSED_PINS
 
 /* COL2ROW, ROW2COL */
 #define DIODE_DIRECTION COL2ROW
@@ -105,8 +94,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Enable Backlighting "Indicator Keys" to specific color when defined
 #define MUSE_KEY_INDICATORS
-#define RGB_MATRIX_MAXIMUM_BRIGHTNESS UINT8_MAX //Max brightness of 255
-#define MUSE_INDICATORS_DIM_VAL (RGB_MATRIX_MAXIMUM_BRIGHTNESS/2)
+#define MUSE_INDICATORS_DIM_VAL (RGBLIGHT_LIMIT_VAL/2)
 
 #define RGB_MATRIX_KEYPRESSES // reacts to keypresses
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS //enable framebuffer effects
@@ -171,13 +159,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENABLE_RGB_MATRIX_DUAL_BEACON
 #define ENABLE_RGB_MATRIX_RAINBOW_BEACON
 #define ENABLE_RGB_MATRIX_RAINBOW_PINWHEELS
+#define ENABLE_RGB_MATRIX_FLOWER_BLOOMING
 #define ENABLE_RGB_MATRIX_RAINDROPS
 #define ENABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 #define ENABLE_RGB_MATRIX_HUE_BREATHING
 #define ENABLE_RGB_MATRIX_HUE_PENDULUM
 #define ENABLE_RGB_MATRIX_HUE_WAVE
 #define ENABLE_RGB_MATRIX_PIXEL_FRACTAL
+#define ENABLE_RGB_MATRIX_PIXEL_FLOW
 #define ENABLE_RGB_MATRIX_PIXEL_RAIN
+#define ENABLE_RGB_MATRIX_STARLIGHT
+#define ENABLE_RGB_MATRIX_STARLIGHT_DUAL_HUE
+#define ENABLE_RGB_MATRIX_STARLIGHT_DUAL_SAT
+#define ENABLE_RGB_MATRIX_RIVERFLOW
 
 // Framebuffer Effects
 #define ENABLE_RGB_MATRIX_TYPING_HEATMAP
@@ -208,11 +202,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-//VIA Setup
 //EEPROM Config
+//VIA Setup
 #define DYNAMIC_KEYMAP_EEPROM_MAX_ADDR 65535
-//Layer Config
-#define DYNAMIC_KEYMAP_LAYER_COUNT 8
 
 //Standard setup
 #define EXTERNAL_EEPROM_I2C_BASE_ADDRESS 0b10100100
@@ -233,7 +225,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define I2C1_TIMINGR_SCLH   1U
 #define I2C1_TIMINGR_SDADEL 0U
 #define I2C1_TIMINGR_SCLDEL 1U
-#define F_SCL 1000000L
 
 
 
@@ -278,10 +269,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define NO_ACTION_LAYER
 //#define NO_ACTION_TAPPING
 //#define NO_ACTION_ONESHOT
-
-/* disable these deprecated features by default */
-#define NO_ACTION_MACRO
-#define NO_ACTION_FUNCTION
 
 /* Bootmagic Lite key configuration */
 //#define BOOTMAGIC_LITE_ROW 0

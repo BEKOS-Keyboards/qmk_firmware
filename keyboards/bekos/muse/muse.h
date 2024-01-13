@@ -1,4 +1,4 @@
-/* Copyright 2021 BOSS-Keyboards
+/* Copyright 2021-2024 BEKOS Keyboards
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,14 +37,14 @@
 typedef union {
 	uint32_t raw;
 	struct PACKED {
-		bool underkey_lock_ind_enable :1;
+		bool underkey_lock_rgb_enable :1;
 		bool user_color_for_lock_ind: 1;
 	};
 } keyboard_config_t;
 
 typedef enum {
 	IND_OFF,
-	IND_INV,
+	IND_WHITE,
 	IND_USER
 } muse_layer_color_e;
 
@@ -53,8 +53,11 @@ typedef struct muse_layer {
 	muse_layer_color_e left;
 } muse_layer_t;
 
-void toggle_lock_key_underglow(void);
-void toggle_user_color_for_indicators(void);
+enum keyboard_keycodes {
+    BKB_IND_TOG = SAFE_RANGE,
+	BKB_USER_TOG,
+    NEW_SAFE_RANGE  // Important!
+};
 
 #define XXXX KC_NO
 

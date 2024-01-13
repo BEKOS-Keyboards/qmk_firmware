@@ -1,4 +1,4 @@
-/* Copyright 2021 BOSS-Keyboards
+/* Copyright 2021-2024 BEKOS Keyboards
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,29 +36,14 @@ enum layer_names {
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
-#ifdef VIA_ENABLE
-    BKB_FN = USER00,
-	BKB_RGB_OFF = USER01,
-	BKB_RGB_HUE = USER02,
-	BKB_RGB_SAT = USER03,
-	BKB_RGB_VAL = USER04,
-	BKB_RGB_SPD = USER05,
-	BKB_IND_TOG = USER06,
-	BKB_USER_TOG = USER07,
-	BKB_LAYER_BASE = SAFE_RANGE,
-#else
-	BKB_FN = SAFE_RANGE,
+    BKB_FN = NEW_SAFE_RANGE,
 	BKB_RGB_OFF,
 	BKB_RGB_HUE,
 	BKB_RGB_SAT,
 	BKB_RGB_VAL,
 	BKB_RGB_SPD,
-	BKB_IND_TOG,
-	BKB_USER_TOG,
 	BKB_LAYER_BASE,
-#endif
-	BKB_LAYER_FN,
-
+	BKB_LAYER_FN
 };
 
 // Configure RGB Control via Encoder
@@ -74,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	// clang-format off
     [_BASE] = LAYOUT(
   		KC_ESC,       KC_F1, KC_F2, KC_F3, KC_F4,    KC_F5, KC_F6, KC_F7, KC_F8,   KC_F9, KC_F10, KC_F11, KC_F12,      KC_PSCR, KC_SCRL, KC_PAUS,      KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, \
-  		KC_GRV, KC_1, KC_2,  KC_3,  KC_4,  KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL,      KC_BSPC,          KC_INS,  KC_HOME, KC_PGUP,      KC_NLCK, KC_PSLS, KC_PAST, KC_PMNS, \
+  		KC_GRV, KC_1, KC_2,  KC_3,  KC_4,  KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL,      KC_BSPC,          KC_INS,  KC_HOME, KC_PGUP,      KC_NUM , KC_PSLS, KC_PAST, KC_PMNS, \
   		KC_TAB,   KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC,    KC_BSLS,            KC_DEL,  KC_END,  KC_PGDN,      KC_KP_7, KC_KP_8, KC_KP_9, KC_PPLS, \
   		KC_CAPS,    KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,         KC_ENT,                                            KC_KP_4, KC_KP_5, KC_KP_6,          \
   		KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,                                    KC_UP,                KC_KP_1, KC_KP_2, KC_KP_3, KC_PENT, \
@@ -196,16 +181,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	case BKB_RGB_OFF:
 		if (record->event.pressed) {
 			rgb_matrix_mode(RGB_MATRIX_CUSTOM_MUSE_RGB_OFF);
-		}
-		break;
-	case BKB_IND_TOG:
-		if (record->event.pressed) {
-			toggle_lock_key_underglow();
-		}
-		break;
-	case BKB_USER_TOG:
-		if (record->event.pressed) {
-			toggle_user_color_for_indicators();
 		}
 		break;
 	case BKB_RGB_HUE:

@@ -1,4 +1,4 @@
-/* Copyright 2021 BOSS-Keyboards
+/* Copyright 2021-2024 BEKOS Keyboards
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,20 +88,20 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
 			layer_ind_conf.left  = IND_USER;
 			break;
 		case 4:
-			layer_ind_conf.right = IND_INV;
+			layer_ind_conf.right = IND_WHITE;
 			layer_ind_conf.left  = IND_OFF;
 			break;
 		case 5:
 			layer_ind_conf.right = IND_OFF;
-			layer_ind_conf.left  = IND_INV;
+			layer_ind_conf.left  = IND_WHITE;
 			break;
 		case 6:
-			layer_ind_conf.right = IND_INV;
-			layer_ind_conf.left  = IND_INV;
+			layer_ind_conf.right = IND_WHITE;
+			layer_ind_conf.left  = IND_WHITE;
 			break;
 		case 7:
 			layer_ind_conf.right = IND_USER;
-			layer_ind_conf.left  = IND_INV;
+			layer_ind_conf.left  = IND_WHITE;
 			break;
 		default:
 			layer_ind_conf.right = IND_OFF;
@@ -112,7 +112,7 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
 
 void eeconfig_init_kb(void) {
 	keyboard_config_t init = {0};
-	init.underkey_lock_ind_enable = true;
+	init.underkey_lock_rgb_enable = true;
 	eeconfig_update_kb(init.raw);
 	eeconfig_init_user();
 }
@@ -129,38 +129,38 @@ void keyboard_post_init_kb(void) {
 	keyboard_post_init_user();
 }
 
-void toggle_lock_key_underglow(void) {
-	kb_config.underkey_lock_ind_enable = !kb_config.underkey_lock_ind_enable;
-	eeconfig_update_kb(kb_config.raw);
-}
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+	switch(keycode) {
+		case BKB_IND_TOG:
+			if (record->event.pressed){
+				kb_config.underkey_lock_rgb_enable = !kb_config.underkey_lock_rgb_enable;
+				eeconfig_update_kb(kb_config.raw);
+			}
+			return false;
+		case BKB_USER_TOG:
+			if (record->event.pressed){
+				kb_config.user_color_for_lock_ind = !kb_config.user_color_for_lock_ind;
+				eeconfig_update_kb(kb_config.raw);
+			}
+			return false;
 
-void toggle_user_color_for_indicators(void) {
-	kb_config.user_color_for_lock_ind = !kb_config.user_color_for_lock_ind;
-	eeconfig_update_kb(kb_config.raw);
+	}
+	return process_record_user(keycode, record);
 }
 
 static inline RGB dim_indicators(HSV hsv) {
-	hsv.v = scale8(hsv.v, RGB_MATRIX_MAXIMUM_BRIGHTNESS-MUSE_INDICATORS_DIM_VAL);
+	hsv.v = scale8(hsv.v, UINT8_MAX-MUSE_INDICATORS_DIM_VAL);
 	return hsv_to_rgb(hsv);
-}
-
-static inline uint8_t invert_hsv_member(uint8_t m) {
-	uint16_t res = (m - INT8_MIN); // Get larger result
-	return (uint8_t) res % UINT8_MAX;
-}
-
-static inline HSV invert_color(HSV hsv) {
-	hsv.h = invert_hsv_member(hsv.h);
-	return hsv;
 }
 
 static inline HSV get_muse_layer_indicators(muse_layer_color_e color) {
 	static HSV hsv_off = {HSV_OFF};
+	static HSV hsv_white = {HSV_WHITE};
 	switch (color) {
 		case IND_OFF:
 			return hsv_off;
-		case IND_INV:
-			return invert_color(rgb_matrix_get_hsv());
+		case IND_WHITE:
+			return hsv_white;
 		case IND_USER:
 			return rgb_matrix_get_hsv();
 		default:
@@ -169,10 +169,14 @@ static inline HSV get_muse_layer_indicators(muse_layer_color_e color) {
 	return hsv_off;
 }
 
-void rgb_matrix_indicators_kb(void) {
+bool rgb_matrix_indicators_kb(void) {
 	led_t led_state = host_keyboard_led_state();
 	static HSV white_hsv = {HSV_WHITE};
 	static RGB indicator_color;
+    if (!rgb_matrix_indicators_user()) {
+        return false;
+    }
+
 	if (led_state.caps_lock){
 		if (kb_config.user_color_for_lock_ind) {
 			indicator_color = dim_indicators(rgb_matrix_get_hsv());
@@ -181,7 +185,7 @@ void rgb_matrix_indicators_kb(void) {
 		}
 		rgb_matrix_set_color(CAPS_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
-		if (kb_config.underkey_lock_ind_enable) {
+		if (kb_config.underkey_lock_rgb_enable) {
 			rgb_matrix_set_color(CAPS_LOCK_KEY_LED, RGB_WHITE);
 		}
 #endif
@@ -196,7 +200,7 @@ void rgb_matrix_indicators_kb(void) {
 		}
 		rgb_matrix_set_color(NUM_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
-		if (kb_config.underkey_lock_ind_enable) {
+		if (kb_config.underkey_lock_rgb_enable) {
 			rgb_matrix_set_color(NUM_LOCK_KEY_LED, RGB_WHITE);
 		}
 #endif
@@ -211,7 +215,7 @@ void rgb_matrix_indicators_kb(void) {
 		}
 		rgb_matrix_set_color(SCROLL_LOCK_LED, indicator_color.r, indicator_color.g, indicator_color.b);
 #if defined(MUSE_KEY_INDICATORS)
-		if (kb_config.underkey_lock_ind_enable) {
+		if (kb_config.underkey_lock_rgb_enable) {
 			rgb_matrix_set_color(SCROLL_LOCK_KEY_LED, RGB_WHITE);
 		}
 #endif
@@ -222,4 +226,5 @@ void rgb_matrix_indicators_kb(void) {
 	RGB kana_led_color = dim_indicators(get_muse_layer_indicators(layer_ind_conf.right));
 	rgb_matrix_set_color(COMPOSE_LED, compose_led_color.r, compose_led_color.g, compose_led_color.b);
 	rgb_matrix_set_color(KANA_LED, kana_led_color.r, kana_led_color.g, kana_led_color.b);
+    return true;
 }
