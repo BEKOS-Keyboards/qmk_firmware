@@ -31,7 +31,8 @@
 #    define OPT_SCALE 1  // Multiplier for wheel
 #endif
 #ifndef PLOOPY_DPI_OPTIONS
-#    define PLOOPY_DPI_OPTIONS { 1200, 1600, 2400 }
+#    define PLOOPY_DPI_OPTIONS \
+        { 1200, 1600, 2400 }
 #    ifndef PLOOPY_DPI_DEFAULT
 #        define PLOOPY_DPI_DEFAULT 1
 #    endif
@@ -40,15 +41,15 @@
 #    define PLOOPY_DPI_DEFAULT 0
 #endif
 #ifndef PLOOPY_DRAGSCROLL_DPI
-#    define PLOOPY_DRAGSCROLL_DPI 100 // Fixed-DPI Drag Scroll
+#    define PLOOPY_DRAGSCROLL_DPI 100  // Fixed-DPI Drag Scroll
 #endif
 #ifndef PLOOPY_DRAGSCROLL_MULTIPLIER
-#    define PLOOPY_DRAGSCROLL_MULTIPLIER 0.75 // Variable-DPI Drag Scroll
+#    define PLOOPY_DRAGSCROLL_MULTIPLIER 0.75  // Variable-DPI Drag Scroll
 #endif
 
 keyboard_config_t keyboard_config;
 uint16_t          dpi_array[] = PLOOPY_DPI_OPTIONS;
-#define DPI_OPTION_SIZE (sizeof(dpi_array) / sizeof(uint16_t))
+#define DPI_OPTION_SIZE ARRAY_SIZE(dpi_array)
 
 // TODO: Implement libinput profiles
 // https://wayland.freedesktop.org/libinput/doc/latest/pointer-acceleration.html
@@ -65,7 +66,24 @@ uint8_t  OptLowPin         = OPT_ENC1;
 bool     debug_encoder     = false;
 bool     is_drag_scroll    = false;
 
-void process_wheel(report_mouse_t* mouse_report) {
+__attribute__((weak)) bool encoder_update_user(uint8_t index, bool clockwise) { return true; }
+
+bool encoder_update_kb(uint8_t index, bool clockwise) {
+    if (!encoder_update_user(index, clockwise)) {
+        return false;
+    }
+#ifdef MOUSEKEY_ENABLE
+    tap_code(clockwise ? KC_WH_U : KC_WH_D);
+#else
+    report_mouse_t mouse_report = pointing_device_get_report();
+    mouse_report.v = clockwise ? 1 : -1;
+    pointing_device_set_report(mouse_report);
+    pointing_device_send();
+#endif
+    return true;
+}
+
+void process_wheel(void) {
     // TODO: Replace this with interrupt driven code,  polling is S L O W
     // Lovingly ripped from the Ploopy Source
 
@@ -94,14 +112,19 @@ void process_wheel(report_mouse_t* mouse_report) {
     int dir = opt_encoder_handler(p1, p2);
 
     if (dir == 0) return;
-    mouse_report->v = (int8_t)(dir * OPT_SCALE);
+    encoder_update_kb(0, dir > 0);
 }
 
 report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
-    process_wheel(&mouse_report);
+    process_wheel();
 
     if (is_drag_scroll) {
+#ifdef PLOOPY_DRAGSCROLL_H_INVERT
+        // Invert horizontal scroll direction
+        mouse_report.h = -mouse_report.x;
+#else
         mouse_report.h = mouse_report.x;
+#endif
 #ifdef PLOOPY_DRAGSCROLL_INVERT
         // Invert vertical scroll direction
         mouse_report.v = -mouse_report.y;
@@ -155,14 +178,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
  * the keycodes in a consistent manner.  But only do this if
  * Mousekeys is not enable, so it's not handled twice.
  */
-#ifndef MOUSEKEY_ENABLE
-    if (IS_MOUSEKEY_BUTTON(keycode)) {
-        report_mouse_t currentReport = pointing_device_get_report();
-        currentReport.buttons        = pointing_device_handle_buttons(record->event.pressed, keycode - KC_MS_BTN1);
-        pointing_device_set_report(currentReport);
-        pointing_device_send();
-    }
-#endif
 
     return true;
 }
@@ -181,10 +196,10 @@ void keyboard_pre_init_kb(void) {
      * pathways to ground. If you're messing with this, know this: driving ANY
      * of these pins high will cause a short. On the MCU. Ka-blooey.
      */
-#ifdef UNUSED_PINS
-    const pin_t unused_pins[] = UNUSED_PINS;
+#ifdef UNUSABLE_PINS
+    const pin_t unused_pins[] = UNUSABLE_PINS;
 
-    for (uint8_t i = 0; i < (sizeof(unused_pins) / sizeof(pin_t)); i++) {
+    for (uint8_t i = 0; i < ARRAY_SIZE(unused_pins); i++) {
         setPinOutput(unused_pins[i]);
         writePinLow(unused_pins[i]);
     }
@@ -200,7 +215,7 @@ void keyboard_pre_init_kb(void) {
 }
 
 void pointing_device_init_kb(void) {
-    pmw3360_set_cpi(dpi_array[keyboard_config.dpi_config]);
+    pointing_device_set_cpi(dpi_array[keyboard_config.dpi_config]);
     // initialize the scroll wheel's optical encoder
     opt_encoder_init();
 }
